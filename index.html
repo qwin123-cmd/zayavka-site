@@ -169,7 +169,7 @@ footer{padding:26px 0 36px;color:var(--muted);font-size:14px}
               <option value="Доклад" data-price="400">Доклад — 400 ₽</option><option value="Доклад + презентация" data-price="600">Доклад + презентация — 600 ₽</option>
               <option value="Реферат" data-price="500">Реферат — 500 ₽</option>
               
-              <option value="Эссе" data-price="400">Эссе — 400 ₽</option>
+              <option value="Эссе" data-price="400">Эссе — 400 ₽</option><option value="Индивидуальный проект" data-price="3500">Индивидуальный проект — 3500 ₽</option>
               <option value="Другое" data-price="0">Другое — цену назовём в чате</option>
             </select>
           </div>
@@ -245,6 +245,7 @@ footer{padding:26px 0 36px;color:var(--muted);font-size:14px}
         
         <div><b>Эссе</b><span>Рассуждение на заданную тему в нужном объёме.</span><i class="pr">400 ₽</i></div>
         <div><b>Оформление</b><span>Приведём вашу работу к требованиям методички.</span><i class="pr">по договорённости</i></div>
+        <div style="grid-column:1/-1"><b>Индивидуальные проекты</b><span>Большая самостоятельная работа: тема, структура, текст и оформление. Объём и детали обсудим в чате.</span><i class="pr">3500 ₽</i></div>
       </div>
     </div>
   </section>
@@ -265,7 +266,7 @@ footer{padding:26px 0 36px;color:var(--muted);font-size:14px}
     <div class="wrap">
       <h2 class="t">Частые вопросы</h2>
       <p class="d">Если не нашли ответ, напишите нам в Telegram.</p>
-      <details><summary>Сколько это стоит?</summary><p>Презентация 300 ₽, доклад 400 ₽, реферат 500 ₽, эссе 400 ₽. Доклад вместе с презентацией 600 ₽. В цену входит до 15 слайдов или страниц, дальше доплата за каждый: презентация, доклад и эссе +20 ₽, реферат +25 ₽, доклад вместе с презентацией +30 ₽. Срочный заказ стоит в два раза дороже.</p></details>
+      <details><summary>Сколько это стоит?</summary><p>Презентация 300 ₽, доклад 400 ₽, реферат 500 ₽, эссе 400 ₽. Доклад вместе с презентацией 600 ₽. Индивидуальный проект 3500 ₽, объём и детали уточняем в чате. В цену входит до 15 слайдов или страниц, дальше доплата за каждый: презентация, доклад и эссе +20 ₽, реферат +25 ₽, доклад вместе с презентацией +30 ₽. Срочный заказ стоит в два раза дороже.</p></details>
       <details><summary>Как оплатить?</summary><p>Половина стоимости сразу после подтверждения заявки, вторая половина после выполнения работы. Реквизиты пришлём в Telegram.</p></details>
       <details><summary>Что, если срок горит?</summary><p>Отметьте в заявке «Срочный заказ». Стоимость будет в два раза выше. Если времени совсем мало, напишите нам в Telegram.</p></details>
       <details><summary>Можно ли что-то исправить после сдачи?</summary><p>Да. Если у преподавателя есть замечания, пришлите их нам, и мы внесём правки.</p></details>
@@ -317,13 +318,13 @@ function calc(){
   var more = Math.max(0, n - LIMIT);
   var ex = more * (EXTRA[o.value] || 0);
   var t = (b0 + ex) * (isUrgent() ? 2 : 1);
-  return {total:t, half:t/2, extra:ex, more:more, other:false};
+  return {total:t, half:Math.ceil(t/2), extra:ex, more:more, other:false};
 }
 function showPrice(){
   var c = calc(), pr = document.getElementById("price"), pay = document.getElementById("pay");
   if (c.total) {
     pr.textContent = fmt(c.total) + (isUrgent() ? " (срочно, ×2)" : "");
-    pay.textContent = (c.extra ? "С доплатой за объём: +" + fmt(c.extra * (isUrgent() ? 2 : 1)) + " (" + c.more + " сверх " + LIMIT + "). " : "") + "Сейчас " + fmt(c.half) + ", ещё " + fmt(c.half) + " после выполнения";
+    pay.textContent = (c.extra ? "С доплатой за объём: +" + fmt(c.extra * (isUrgent() ? 2 : 1)) + " (" + c.more + " сверх " + LIMIT + "). " : "") + "Сейчас " + fmt(c.half) + ", ещё " + fmt(c.total - c.half) + " после выполнения";
   } else {
     pr.textContent = c.other ? "Назовём в чате" : "Выберите тип работы";
     pay.textContent = "Оплата: 50% сразу, 50% после выполнения";
